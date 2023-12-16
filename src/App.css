@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.refreshBtn {
+  font-family: Arial !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 12px !important;
+  padding: 12px !important;
+  background: #007EA5 !important;
+  border-radius: 4px !important;
+}
+.results {
+  font-family: Arial !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  color: white;
+}
