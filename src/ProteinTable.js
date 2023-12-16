@@ -1,40 +1,58 @@
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
-import React, { useState } from "react";
-import { createRoot } from "react-dom/client";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css"; // Core CSS
-import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import "./ProteinTable.css";
-// ag-theme-quartz[.min].css
+import React, { useState, useEffect } from "react";
+import { useQuery, gql } from "@apollo/client";
+import { LOAD_SAMPLES } from "./GraphQl/Queries";
 import { Table, Pagination, PaginationItem, PaginationLink } from "reactstrap";
-// Create new GridExample component
+import "./ProteinTable.css";
+
 const ProteinTable = () => {
-  // Row Data: The data to be displayed.
-  const [rowData, setRowData] = useState([
-    {
-      "protein name": "Voyager",
-      abundance: "NASA",
-      confidence: "Cape Canaveral",
-    },
-    {
-      "protein name": "Apollo 13",
-      abundance: "NASA",
-      confidence: "Kennedy Space Center",
-    },
-    {
-      "protein name": "Falcon 9",
-      abundance: "SpaceX",
-      confidence: "Cape Canaveral",
-    },
-  ]);
-  // Column Definitions: Defines & controls grid columns.
-  const [colDefs, setColDefs] = useState([{ field: "protein name" }, { field: "abundance" }, { field: "confidence" }]);
-  // Container: Defines the grid's theme & dimensions.
+  const { error, loading, data } = useQuery(LOAD_SAMPLES, {
+    variables: { first: 3, offset: 2 },
+  });
+  const [rowData, setRowData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    console.log("data: ", data);
+    if (data && data.allSamples && data.allSamples.nodes) {
+      setRowData(data.allSamples.nodes);
+    }
+  }, data);
+  const changePage = (pageNumber) => {
+    if (currentPage === pageNumber) return;
+    setCurrentPage(pageNumber);
+  };
+  const onPageNumberClick = (pageNumber) => {
+    changePage(pageNumber);
+  };
+  const onPreviousPageClick = () => {
+    if (currentPage === 1) return;
+    changePage((currentPage) => currentPage - 1);
+  };
+  const onNextPageClick = () => {
+    if (currentPage === Math.ceil(rowData.length / 3)) return;
+    changePage((currentPage) => currentPage + 1);
+  };
+  const isCurrentPageFirst = currentPage === 1;
+  const isCurrentPageLast = currentPage === 2;
+  const renderTablePage = () => {
+    if (rowData.length === 0) return null;
+    let end = 3 * currentPage;
+    let start = end - 3;
+    if (end > rowData.length) {
+      end = rowData.length;
+    }
+    const renderRows = [];
+    for (let i = start; i < end; i++) {
+      renderRows.push(
+        <tr>
+          <td>{rowData[i].proteinName}</td>
+          <td>{rowData[i].abundance}</td>
+          <td>{rowData[i].confidence}</td>
+        </tr>
+      );
+    }
+    return renderRows;
+  };
   return (
-    // <div className={"ag-theme-quartz-dark"} style={{ width: "100%", height: 500 }}>
-    //   <AgGridReact rowData={rowData} columnDefs={colDefs} />
-    // </div>
     <Table size="sm">
       <thead>
         <tr>
@@ -44,36 +62,46 @@ const ProteinTable = () => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
-        </tr>
+        {renderTablePage()}
+        {/* {rowData.map((row, index) => {
+          if (currentPage === 1 && index < 3) {
+            return (
+              <tr>
+                <td>{row.proteinName}</td>
+                <td>{row.abundance}</td>
+                <td>{row.confidence}</td>
+              </tr>
+            );
+          } else {
+            return (
+              <tr>
+                <td>{row.proteinName}</td>
+                <td>{row.abundance}</td>
+                <td>{row.confidence}</td>
+              </tr>
+            );
+          }
+        })} */}
         <tr size="sm">
           <td></td>
           <td></td>
           <td className="d-flex justify-content-end m-0">
             <Pagination size="sm">
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
+              {[1, 2].map((pageNumber) => {
+                return (
+                  <PaginationItem
+                    key={pageNumber}
+                    onClick={() => onPageNumberClick(pageNumber)}
+                    active={pageNumber === currentPage}
+                  >
+                    <PaginationLink href="#">{pageNumber}</PaginationLink>
+                  </PaginationItem>
+                );
+              })}
+              <PaginationItem onClick={onPreviousPageClick} disabled={isCurrentPageFirst}>
                 <PaginationLink href="#" previous />
               </PaginationItem>
-              <PaginationItem>
+              <PaginationItem onClick={onNextPageClick} disabled={isCurrentPageLast}>
                 <PaginationLink href="#" next />
               </PaginationItem>
             </Pagination>
