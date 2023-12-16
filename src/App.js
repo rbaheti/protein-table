@@ -2,7 +2,7 @@ import "./App.css";
 import ProteinTable from "./ProteinTable";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState } from "react";
-import { Nav, NavItem, NavLink, TabContent, TabPane, Button, Row, Col } from "reactstrap";
+import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from "reactstrap";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
@@ -30,7 +30,7 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <div className="bg-dark" style={{ height: "100%" }}>
+      <div className="bg-dark" style={{ height: "100vh" }}>
         <Router>
           <Nav tabs>
             <NavItem id="1">
@@ -59,10 +59,6 @@ function App() {
               </Link>
             </NavItem>
           </Nav>
-          <div className="d-flex justify-content-between m-2 ps-2 pe-2">
-            <div className="results">Results</div>
-            <Button className="refreshBtn">Refresh</Button>
-          </div>
           <div>
             <TabContent activeTab={activeTab}>
               <TabPane tabId="1">
@@ -73,13 +69,9 @@ function App() {
             </TabContent>
             <TabContent activeTab={activeTab}>
               <TabPane tabId="2">
-                <div className="m-2 p-2">
-                  <Row>
-                    <Col sm="6" style={{ color: "white" }}>
-                      Tab 2 contents
-                    </Col>
-                  </Row>
-                </div>
+                <h3 className="m-2 p-2 text-center" style={{ color: "white" }}>
+                  Tab 2 contents here..
+                </h3>
               </TabPane>
             </TabContent>
           </div>
