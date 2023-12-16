@@ -10,20 +10,18 @@ const ProteinTable = () => {
 
   // Calling "useQuery" only to get full-data for pagination's 2nd page.
   // If we had a total count of data entries, then we wouldn't have needed to call this.
-  const {
-    error: fdError,
-    loading: fdLoading,
-    data: fullData,
-  } = useQuery(LOAD_SAMPLES, { variables: { first: 10000, offset: 0 } });
+  const { data: fullData } = useQuery(LOAD_SAMPLES, { variables: { first: 10000, offset: 0 } });
   // first and offset variables are used here to know which elements to fetch from the GraphQl api.
   const [getSamplesData, { loading, error, data }] = useLazyQuery(LOAD_SAMPLES);
 
   useEffect(() => {
+    // eslint-disable-next-line
     if (refreshBtnClicked && currentPage > 0) {
       let first = 3;
       let offset = (currentPage - 1) * 3;
       getSamplesData({ variables: { first, offset } });
     }
+    // eslint-disable-next-line
   }, [currentPage]);
 
   const getRowData = (data) => {

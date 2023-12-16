@@ -2,14 +2,14 @@ import "./App.css";
 import ProteinTable from "./ProteinTable";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState } from "react";
-import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from "reactstrap";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 const errorLink = onError(({ graphqlErrors, networkError }) => {
   if (graphqlErrors) {
     graphqlErrors.map(({ message, location, path }) => {
-      alert(`Graphql error ${message}`);
+      return alert(`Graphql error ${message}`);
     });
   }
 });
