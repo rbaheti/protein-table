@@ -1,6 +1,6 @@
 # Protein Sample data
 
-React single page application that is used to display protein sample data in a table. This app demonstrates the use of GraphQl on the client side, react-router, pagination and navigation.
+React single page application to display protein sample data in a table. This app demonstrates the use of GraphQL on the client side, react-router, pagination and navigation.
 
 # Libraries Used
 
@@ -14,10 +14,10 @@ The app fetches data from the graphql server: `http://35.92.236.234:9190/graphql
 
 # Future Work
 
-1. Make the UI same as the mocks provided via Figma.
-2. Add unit tests to test the application code.
-3. Make pagination work without calling useQuery. We are calling it right now since we don't know the exact number of protein samples count. This count is use for pagination.
-4. Modify code to incluse variables for static values.
+1. Ensure that the UI closely mirrors the design mockups.
+3. Add unit tests to test the application code.
+4. Make pagination work without calling useQuery. We are calling it right now since we don't know the exact number of protein samples count. This count is use for pagination.
+5. Modify code to incluse variables for static values.
 
 ## How to install and run the app:
 
