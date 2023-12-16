@@ -35,7 +35,6 @@ const ProteinTable = () => {
 
   const onClickRefreshBtn = (e) => {
     e.preventDefault();
-    console.log("refresh btn clicked!");
     setRefreshBtnClicked(true);
     setCurrentPage(1);
   };
